@@ -1,3 +1,8 @@
 module.exports = {
-  demoPromise: `A promises implementation`
+  demoPromise: `A Promise implementation`,
+  DemoPromise
 };
+
+function DemoPromise() {
+
+}

@@ -4,10 +4,16 @@
 */
 
 let assert = require('assert');
-let mocha = require('mocha');
-let test = mocha.test;
-let promisesImplementation = require('./promises-implementation');
+let { test } = require('mocha');
+let { demoPromise, DemoPromise } = require('./promises-implementation');
 
 test('settings are ok', function() {
-  assert.equal(promisesImplementation.demoPromise, `A promises implementation`);
+  assert.equal(demoPromise, `A Promise implementation`);
+});
+
+describe('In the standalone DemoPromise implementation', function() {
+  test('You can create a DemoPromise', function() {
+    let dp = new DemoPromise();
+    assert.equal(dp instanceof DemoPromise, true);
+  });
 });
