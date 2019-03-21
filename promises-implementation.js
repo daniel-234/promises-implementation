@@ -4,5 +4,9 @@ module.exports = {
 };
 
 function DemoPromise() {
-
+  
 }
+
+DemoPromise.prototype.resolve = function() {};
+
+DemoPromise.prototype.then = function() {};

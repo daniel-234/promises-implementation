@@ -7,13 +7,22 @@ let assert = require('assert');
 let { test } = require('mocha');
 let { demoPromise, DemoPromise } = require('./promises-implementation');
 
-test('settings are ok', function() {
+test('Settings are ok', function() {
   assert.equal(demoPromise, `A Promise implementation`);
 });
 
-describe('In the standalone DemoPromise implementation', function() {
-  test('You can create a DemoPromise', function() {
+describe('The standalone DemoPromise implementation', function() {
+  test('lets you create a promise', function() {
     let dp = new DemoPromise();
     assert.equal(dp instanceof DemoPromise, true);
+  });
+
+  test('promises resolve after the callable "then"', function(done) {
+    let dp = new DemoPromise();
+    dp.resolve('just a common string');
+    dp.then(function(value) {
+      assert.equal(value, 'just a common string');
+      done();
+    });
   });
 });
