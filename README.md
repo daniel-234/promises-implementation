@@ -1,30 +1,17 @@
 # Promises implementation
 
-TODO
-
-## About this project
-
-TODO
+A reproduction of a promise implementation. 
+It rebuilds the project developed by Alex Rauschmayer and explained in [his book](http://exploringjs.com/es6/ch_promises.html#sec_demo-promise) in the chapter about Promises. 
 
 ## Getting Started
 
-TODO 
+To run this application, you need to have Node.js installed. If you don't have it, please go to the [Node.js](https://nodejs.org/en/) website, download and install it. 
 
-## Built With
+Then you can install this application, by (forking and) downloading it and then running the command `npm install` from your terminal.
 
-TODO
+Run the tests by copying and typing the command you can find at the beginning of the test file. 
 
-## Author
+## Notes and Acknowledgments
 
-- **Daniele Erbì** - [daniel-234](https://github.com/daniel-234)
-
-## Notes
-
-
-## License
-
-This project is intended for learning purposes only. It reproduces the code written by Alex Rauschmayer, which he explaines in [his book](http://exploringjs.com/es6/ch_promises.html#sec_demo-promise) in the chapter about Promises.
-
-## Acknowledgments
-
-[Demo Promises by Alex Rauschmeyer](https://github.com/rauschma/demo_promise)
+All the code in this project is copied from the original work [Demo Promises by Alex Rauschmeyer](https://github.com/rauschma/demo_promise). I rebuilt it step by step for self study purposes only.
+Read the relative paragraph in [his book](http://exploringjs.com/es6/ch_promises.html#sec_demo-promise) for an explanation of the code.
