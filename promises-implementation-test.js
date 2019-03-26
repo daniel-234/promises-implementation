@@ -17,12 +17,21 @@ describe('The standalone DemoPromise implementation', function() {
     assert.equal(dp instanceof DemoPromise, true);
   });
 
-  test('promises resolve after the callable "then"', function(done) {
+  test('promises can resolve', function(done) {
     let dp = new DemoPromise();
     dp.resolve('just a common string');
     dp.then(function(value) {
       assert.equal(value, 'just a common string');
       done();
     });
+  });
+
+  test('promises can reject', function(done) {
+    let dp = new DemoPromise();
+    dp.reject('for some reason');
+    dp.then(function(reason) {
+      assert.equal(reason, 'for some reason');
+      done();
+    })
   });
 });
