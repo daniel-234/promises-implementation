@@ -32,6 +32,18 @@ DemoPromise.prototype.resolve = function(value) {
 };
 
 /**
+ * Change the state of the Promise to 'rejected' and cache the result in this.promiseResult.
+ * 
+ * @param {*} reason - The reason for rejection
+ * @returns {Object} An object instance of this class with the assigned property values.
+ */
+DemoPromise.prototype.reject = function(reason) {
+  this.promiseState = 'rejected';
+  this.promiseResult = reason;
+  return this;
+};
+
+/**
  * Handle the promise result.
  * 
  * @param {Function} - The callback that handles the promise result.
