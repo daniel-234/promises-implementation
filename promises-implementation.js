@@ -48,15 +48,40 @@ DemoPromise.prototype.reject = function(reason) {
  * 
  * @param {Function} - The callback that handles the promise result.
  */
-DemoPromise.prototype.then = function(onFulfilled) {
+DemoPromise.prototype.then = function(onFulfilled, onRejected) {
   /**
-   * Run the callback and store its result. Bind the expression to 
-   * same "this" as in DemoPromise.prototype. 
+   * Bind the resolution callback to "fulfilledTask". 
    */
   let fulfilledTask = (function() {
     onFulfilled(this.promiseResult);
   }).bind(this);
 
-  // Add the callback onFulfilled to the Task Queue.
-  setTimeout(fulfilledTask, 0);
+  /**
+   * Bind the rejection callback to "rejectedTask". 
+   */
+  let rejectedTask = (function() {
+    // TODO
+    // CHange later to onRejected
+    onFulfilled(this.promiseResult);
+  }).bind(this);
+
+  switch(this.promiseState) {
+    case 'pending':
+      break;
+    case 'fulfilled':
+      addToTaskQueue(fulfilledTask);
+      break;
+    case 'rejected':
+      addToTaskQueue(rejectedTask);
+      break;
+  }  
 };
+
+/**
+ * Add task to the task queue. 
+ * 
+ * @param {Function} task 
+ */
+function addToTaskQueue(task) {
+  setTimeout(task, 0);
+}
