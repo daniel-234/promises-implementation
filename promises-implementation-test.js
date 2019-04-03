@@ -11,7 +11,7 @@ test('Settings are ok', function() {
   assert.equal(demoPromise, `A Promise implementation`);
 });
 
-describe('The standalone DemoPromise implementation', function() {
+describe('The DemoPromise implementation', function() {
   test('lets you create a promise', function() {
     let dp = new DemoPromise();
     assert.equal(dp instanceof DemoPromise, true);
@@ -31,6 +31,18 @@ describe('The standalone DemoPromise implementation', function() {
     dp.reject('for some reason');
     dp.then(function(reason) {
       assert.equal(reason, 'for some reason');
+      done();
+    });
+  });
+
+  test('promises can chain', function(done) {
+    let dp = new DemoPromise();
+    dp.resolve(123);
+    dp.then(function(value1) {
+      assert.equal(value1, 123);
+      return 'abc';
+    }).then(function(value2) {
+      assert.equal(value2, 'abc');
       done();
     })
   });

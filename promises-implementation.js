@@ -15,6 +15,8 @@ module.exports = {
  * @constructor
  */
 function DemoPromise() {
+  this.fulfillReactions = [];
+  this.rejectReactions = [];
   this.promiseResult = undefined;
   this.promiseState = 'pending';
 }
@@ -28,6 +30,8 @@ function DemoPromise() {
 DemoPromise.prototype.resolve = function(value) {
   this.promiseState = 'fulfilled';
   this.promiseResult = value;
+  this.fulfillReactions.map(addToTaskQueue);
+  this.fulfillReactions = undefined;
   return this;
 };
 
@@ -49,12 +53,25 @@ DemoPromise.prototype.reject = function(reason) {
  * @param {Function} - The callback that handles the promise result.
  */
 DemoPromise.prototype.then = function(onFulfilled, onRejected) {
-  /**
-   * Bind the resolution callback to "fulfilledTask". 
-   */
-  let fulfilledTask = (function() {
-    onFulfilled(this.promiseResult);
-  }).bind(this);
+  // Create a new DemoPromise object;
+  let returnValue = new DemoPromise();
+
+  let fulfilledTask;
+  if (typeof onFulfilled === 'function') {
+    /**
+     * Bind the resolution callback to "fulfilledTask". 
+     */
+    fulfilledTask = (function() {
+      let result = onFulfilled(this.promiseResult);
+      // Resolve with whathever onFulfilled returns.
+      returnValue.resolve(result);
+    }).bind(this);     
+  } else {
+    fulfilledTask = (function() {
+      // Pass on whatever is received. 
+      returnValue.resolve(this.promiseResult);
+    }).bind(this);
+  }  
 
   /**
    * Bind the rejection callback to "rejectedTask". 
@@ -67,6 +84,7 @@ DemoPromise.prototype.then = function(onFulfilled, onRejected) {
 
   switch(this.promiseState) {
     case 'pending':
+      this.fulfillReactions.push(fulfilledTask);
       break;
     case 'fulfilled':
       addToTaskQueue(fulfilledTask);
@@ -75,6 +93,8 @@ DemoPromise.prototype.then = function(onFulfilled, onRejected) {
       addToTaskQueue(rejectedTask);
       break;
   }  
+
+  return returnValue;
 };
 
 /**
