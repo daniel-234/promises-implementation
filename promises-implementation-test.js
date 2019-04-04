@@ -47,3 +47,55 @@ describe('The DemoPromise implementation', function() {
     })
   });
 });
+
+describe('DemoPromise fulfills by returning in reactions', function() {
+  test('it fulfills via onFulfilled', function(done) {
+    let dp = new DemoPromise();
+    dp.resolve();
+    dp.then(function(value1) {
+        assert.equal(value1, undefined);
+        return 123;
+      }).then(function(value2) {
+        assert.equal(value2, 123);
+        done();
+      })
+  });
+
+  test('it fulfills via onRejected', function(done) {
+    let dp = new DemoPromise();
+    dp.reject();
+    dp.catch(function(reason) {
+        assert.equal(reason, undefined);
+        return 123;
+      }).then(function(value) {
+        assert.equal(value, 123);
+        done();
+      });
+  });
+});
+
+describe('Rejecting by throwing in reactions', function() {
+  test('it rejects via onFulfilled', function(done) {
+    let myError;
+    let dp = new DemoPromise();
+    dp.resolve();
+    dp.then(function(value) {
+        assert.equal(value, undefined);
+        throw myError = new Error();
+      }).catch(function(reason) {
+        assert.equal(reason, myError);
+        done();
+      });
+  });
+
+  test('it rejects via onRejected', function(done) {
+    let myError;
+    let dp = new DemoPromise();
+    dp.reject();
+    dp.catch(function(reason1) {
+        assert.equal(reason1, undefined);
+      }).catch(function(reason2) {
+        assert.equal(reason2, myError);
+      });
+  });
+});
