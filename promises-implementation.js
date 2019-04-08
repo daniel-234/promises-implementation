@@ -38,17 +38,19 @@ DemoPromise.prototype.resolve = function(value) {
 /**
  * Change the state of the Promise to 'rejected' and cache the result in this.promiseResult.
  * 
- * @param {*} reason - The reason for rejection
+ * @param {*} reason - The reason for rejection.
  * @returns {Object} An object instance of this class with the assigned property values.
  */
 DemoPromise.prototype.reject = function(reason) {
   this.promiseState = 'rejected';
   this.promiseResult = reason;
+  this.rejectReactions.map(addToTaskQueue);
+  this.rejectReactions = undefined;
   return this;
 };
 
 /**
- * Handle the promise result.
+ * Handle the resolved promise result.
  * 
  * @param {Function} - The callback that handles the promise result.
  */
@@ -73,18 +75,27 @@ DemoPromise.prototype.then = function(onFulfilled, onRejected) {
     }).bind(this);
   }  
 
-  /**
-   * Bind the rejection callback to "rejectedTask". 
-   */
-  let rejectedTask = (function() {
-    // TODO
-    // CHange later to onRejected
-    onFulfilled(this.promiseResult);
-  }).bind(this);
+  let rejectedTask;
+  if (typeof onRejected === 'function') {
+    /**
+     * Bind the rejection callback to "rejectedTask". 
+     */
+    rejectedTask = (function() {
+      let result = onRejected(this.promiseResult);
+      // Resolve with whatever onRejected returns. 
+      returnValue.resolve(result);
+    }).bind(this);
+  } else {
+    rejectedTask = (function() {
+      // Pass on whatever is rejected.
+      returnValue.resolve(this.promiseResult);
+    }).bind(this);
+  }  
 
   switch(this.promiseState) {
     case 'pending':
       this.fulfillReactions.push(fulfilledTask);
+      this.rejectReactions.push(rejectedTask);
       break;
     case 'fulfilled':
       addToTaskQueue(fulfilledTask);
@@ -96,6 +107,15 @@ DemoPromise.prototype.then = function(onFulfilled, onRejected) {
 
   return returnValue;
 };
+
+/**
+ * Handle the rejected promise result.
+ * 
+ * @param {Function} - The callback that handles the promise rejection.
+ */
+DemoPromise.prototype.catch = function(onRejected) {
+  return this.then(null, onRejected);
+}
 
 /**
  * Add task to the task queue. 

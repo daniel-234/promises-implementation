@@ -29,7 +29,7 @@ describe('The DemoPromise implementation', function() {
   test('promises can reject', function(done) {
     let dp = new DemoPromise();
     dp.reject('for some reason');
-    dp.then(function(reason) {
+    dp.catch(function(reason) {
       assert.equal(reason, 'for some reason');
       done();
     });
@@ -94,8 +94,10 @@ describe('Rejecting by throwing in reactions', function() {
     dp.reject();
     dp.catch(function(reason1) {
         assert.equal(reason1, undefined);
+        throw myError = new Error();
       }).catch(function(reason2) {
         assert.equal(reason2, myError);
+        done();
       });
   });
 });
