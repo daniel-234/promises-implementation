@@ -64,9 +64,14 @@ DemoPromise.prototype.then = function(onFulfilled, onRejected) {
      * Bind the resolution callback to "fulfilledTask". 
      */
     fulfilledTask = (function() {
-      let result = onFulfilled(this.promiseResult);
-      // Resolve with whathever onFulfilled returns.
-      returnValue.resolve(result);
+      try {
+        let result = onFulfilled(this.promiseResult);
+        // Resolve with whathever onFulfilled returns.
+        returnValue.resolve(result);
+      } catch (error) {
+        // Reject with given error.
+        returnValue.reject(error);
+      }      
     }).bind(this);     
   } else {
     fulfilledTask = (function() {
@@ -81,9 +86,13 @@ DemoPromise.prototype.then = function(onFulfilled, onRejected) {
      * Bind the rejection callback to "rejectedTask". 
      */
     rejectedTask = (function() {
-      let result = onRejected(this.promiseResult);
-      // Resolve with whatever onRejected returns. 
-      returnValue.resolve(result);
+      try {
+        let result = onRejected(this.promiseResult);
+        // Resolve with whatever onRejected returns. 
+        returnValue.resolve(result);
+      } catch (error) {
+        returnValue.reject(error);
+      }      
     }).bind(this);
   } else {
     rejectedTask = (function() {
