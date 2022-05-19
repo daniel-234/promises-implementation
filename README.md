@@ -1,5 +1,7 @@
 # Promises implementation
 
+## :red_circle: This repository is now archived!
+
 A reproduction of a promise implementation. 
 It rebuilds the project developed by Alex Rauschmayer and explained in [his book](http://exploringjs.com/es6/ch_promises.html#sec_demo-promise) in the chapter about Promises. 
 
